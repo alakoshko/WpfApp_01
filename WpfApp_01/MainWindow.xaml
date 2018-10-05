@@ -5,8 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp_01"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="MainWindow" Height="450" Width="619.744">
+    <Grid Margin="0,0,2,0">
+        <ComboBox x:Name="comboDepts" HorizontalAlignment="Left" Margin="12,10,0,0" VerticalAlignment="Top" Width="398" 
+                  DropDownClosed="comboDepts_DropDownClosed"/>
+        <ListView x:Name="listViewPersonal" HorizontalAlignment="Left" Height="321" Margin="10,88,0,0" VerticalAlignment="Top" Width="590"
+                  ItemsSource="{Binding}" MouseDoubleClick="listViewPersonal_MouseDoubleClick">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Position" Width="150" DisplayMemberBinding="{Binding Position}" />
+                    <GridViewColumn Header="Lastname" Width="150" DisplayMemberBinding="{Binding Lastname}" />
+                    <GridViewColumn Header="Name" Width="120" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Patronymic" Width="150" DisplayMemberBinding="{Binding Patronymic}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Name="btnEditDepts" Content="Редактировать департаменты" HorizontalAlignment="Left" Margin="415,12,0,0" VerticalAlignment="Top" Width="185" Click="btnEditDepts_Click"/>
+        <Button Name="btnAddEmpl" Content="Добавить работника" HorizontalAlignment="Left" Margin="415,63,0,0" VerticalAlignment="Top" Width="185" Click="btnAddEmpl_Click"/>
+
     </Grid>
 </Window>
