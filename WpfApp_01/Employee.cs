@@ -5,11 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace WpfApp_01
 {
-    public class Employee
+    public class Employee : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #region поля класса
         private Guid _ID;
         public Guid ID
         {
@@ -17,10 +21,48 @@ namespace WpfApp_01
             private set { }
         }
 
-        public string Name { get; set; }
-        public string Lastname { get; set; }
-        public string Patronymic { get; set; }
-        public string Position;
+        private string name;
+        public string Name {
+            get => name;
+            set => setMetod<string>(value, ref name, Name);
+        }
+
+        private string lastname;
+        public string Lastname {
+            get => lastname;
+            set => setMetod<string>(value, ref lastname, Lastname);
+        }
+
+        private string patronymic;
+        public string Patronymic { get => patronymic;
+            set => setMetod<string>(value, ref patronymic, Patronymic);
+        }
+
+        private int age;
+        public int Age { get => age;
+            set => setMetod<int>(value, ref age, Age);
+        }
+
+        private double salary;
+        public double Salary { get => salary;
+            set => setMetod<double>(value, ref salary, Salary);
+        }
+
+        private string position;
+        public string Position
+        {
+            get => position;
+            set => setMetod<string>(value, ref position, Position);
+        }
+
+        private void setMetod<T>(T value, ref T v, T V)
+        {
+            if (Equals(v, value)) return;
+            v = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(V)));
+        }
+        #endregion 
+
         public Department department;
 
         public Employee()

@@ -33,7 +33,7 @@ namespace WpfApp_01
             dept = (Department)lstViewDepts.SelectedItem;
             Name.Text = dept.Name;
             //почему-то не работает...
-            cmbCompany.SelectedItem = dept.Company;
+            //cmbCompany.SelectedItem = dept.Company;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -47,7 +47,7 @@ namespace WpfApp_01
             if (dept != null)
             {
                 dept.Name = Name.Text;
-                dept.Company = (Company)cmbCompany.SelectedItem;
+                //dept.Company = (Company)cmbCompany.SelectedItem;
                 CollectionViewSource.GetDefaultView(lstViewDepts.ItemsSource).Refresh();
                 CollectionViewSource.GetDefaultView(cmbCompany.ItemsSource).Refresh();
             }

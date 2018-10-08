@@ -37,8 +37,8 @@ namespace WpfApp_01
 
             var depts = new Department[]
             {
-                new Department{ Name = "FrontOffice", Company = companySun },
-                new Department{ Name = "BackOffice", Company = companySun }
+                new Department{ Name = "FrontOffice"},
+                new Department{ Name = "BackOffice"}
             };
 
             var emps = new Employee[]

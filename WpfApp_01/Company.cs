@@ -8,6 +8,8 @@ namespace WpfApp_01
 {
     public class Company
     {
+        public IEnumerable<Department> Departments { get; }
+
         public string Name { get; set; }
 
         public Company() => Name = "";
