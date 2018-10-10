@@ -15,6 +15,14 @@ namespace WpfApp_01
 
         public Department() {
             Name = "";
+
+            _Employes.Add(new Employee { Name = "Иван", Lastname = "Петров", department = this });
+            _Employes.Add(new Employee{ Name = "Петр", Lastname = "Иванов", department = this });
+            _Employes.Add(new Employee{ Name = "Василий", Lastname = "Сидоров", department = this });
+            _Employes.Add(new Employee{ Name = "Валерий", Lastname = "Ельченко", department = this });
+            _Employes.Add(new Employee{ Name = "Феофан", Lastname = "Шайн ", department = this });
+            _Employes.Add(new Employee{ Name = "Игнат", Lastname = "Черкашин", department = this });
+            _Employes.Add(new Employee{ Name = "Якуб", Lastname = "Малиновский", department = this });
             //Company = null;
         }
 

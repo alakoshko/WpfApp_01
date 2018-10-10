@@ -50,7 +50,7 @@ namespace WpfApp_01
             //Dept.DisplayMemberPath = "Name";
             //Dept.SelectedValuePath = "ID";
             Dept.ItemsSource = null;
-            Dept.ItemsSource = MainWindow.Depts; // Set data source which has all items
+            //Dept.ItemsSource = MainWindow.Depts; // Set data source which has all items
             
         }
 
@@ -61,12 +61,9 @@ namespace WpfApp_01
             employee.Patronymic = Patronymic.Text;
             employee.department = (Department)Dept.SelectedItem;
 
-            if (newEmployee)
-                MainWindow.Personal.Add(employee);
-            //MainWindow.dictEmplotyeers[employee.ID].Lastname = Lastname.Text;
-            //MainWindow.dictEmplotyeers[employee.ID].Name = Firstname.Text;
-            //MainWindow.dictEmplotyeers[employee.ID].Patronymic = Patronymic.Text;
-            //MainWindow.dictEmplotyeers[employee.ID].department = (Department)Dept.SelectedItem;
+            //if (newEmployee)
+            //    MainWindow.Personal.Add(employee);
+   
             this.Close();
         }
     }

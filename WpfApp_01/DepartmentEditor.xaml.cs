@@ -20,11 +20,13 @@ namespace WpfApp_01
     public partial class DepartmentEditor : Window
     {
         private Department dept;
-        public DepartmentEditor()
+        private Company company;
+        public DepartmentEditor(Company company)
         {
+            this.company = company;
             InitializeComponent();
-            lstViewDepts.ItemsSource = MainWindow.Depts;
-            cmbCompany.ItemsSource = MainWindow.Companys;
+            lstViewDepts.ItemsSource = company.Departments;
+            //cmbCompany.ItemsSource = /*company*/;
         }
 
 
@@ -38,7 +40,7 @@ namespace WpfApp_01
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.Depts.Add(new Department("новый департамент"));
+            company.Departments.Append(new Department("новый департамент"));
             CollectionViewSource.GetDefaultView(lstViewDepts.ItemsSource).Refresh();
         }
 
