@@ -13,32 +13,34 @@ namespace WpfApp_01
     class MainWindowViewModel : ViewModel
     {
 
-        public ObservableCollection<Department> Depts { get; } = new ObservableCollection<Department>
-        {
-            new Department("FrontOffice"){ DeptName = "FrontOffice" },
-            new Department{ DeptName = "BackOffice" }
-        };
+        public ObservableCollection<Department> Depts { get; } = new ObservableCollection<Department>();
+        //{
+        //    new Department("FrontOffice"){ DeptName = "FrontOffice" },
+        //    new Department{ DeptName = "BackOffice" }
+        //};
 
-        public ObservableCollection<Employee> Employes { get; } = new ObservableCollection<Employee>
-        {
-            new Employee{ Name = "Иван", Lastname = "Петров", Dept = new Department{ DeptName = "FronOffice"} },
-            new Employee{ Name = "Петр", Lastname = "Иванов" },
-            new Employee{ Name = "Василий", Lastname = "Сидоров" },
-            new Employee{ Name = "Валерий", Lastname = "Ельченко" },
-            new Employee{ Name = "Феофан", Lastname = "Шайн" },
-            new Employee{ Name = "Игнат", Lastname = "Черкашин" },
-            new Employee{ Name = "Якуб", Lastname = "Малиновский" },
-        };
+        public ObservableCollection<Employee> Employes { get; } = new ObservableCollection<Employee>();
+        //public ObservableCollection<Employee> Employes { get; } = new ObservableCollection<Employee>
+        //{
+        //    new Employee{ Name = "Иван", Lastname = "Петров", Dept = new Department{ DeptName = "FronOffice"} },
+        //    new Employee{ Name = "Петр", Lastname = "Иванов" },
+        //    new Employee{ Name = "Василий", Lastname = "Сидоров" },
+        //    new Employee{ Name = "Валерий", Lastname = "Ельченко" },
+        //    new Employee{ Name = "Феофан", Lastname = "Шайн" },
+        //    new Employee{ Name = "Игнат", Lastname = "Черкашин" },
+        //    new Employee{ Name = "Якуб", Lastname = "Малиновский" },
+        //};
 
-        
-        public ObservableCollection<Company> Companies { get; } = new ObservableCollection<Company>
-        {
-            new Company{ Name = "Sun microsystem" }
-        };
+
+        public ObservableCollection<Company> Companies { get; } = new ObservableCollection<Company>();
+        //{
+        //    new Company{ Name = "Sun microsystem" }
+        //};
 
         public ICommand AddCommand { get; }
         public ICommand RemoveCommand { get; }
         public ICommand EditCommand { get; }
+
 
         public MainWindowViewModel()
         {
@@ -46,8 +48,46 @@ namespace WpfApp_01
             RemoveCommand = new LambdaCommand(OnRemoveCommandExecute);
             EditCommand = new LambdaCommand(OnEditCommandExecute);
 
+            #region Загрузка из БД
             var sqlProcessing = new SQLProcessing();
-            //sqlProcessing.
+
+            //Company
+            sqlProcessing.GetCompanies(Companies);
+
+            //Departaments
+            sqlProcessing.GetDepartments(Depts);
+            foreach (var v in Depts)
+            {
+                if (v.CompanyID != null)
+                    v.Company = GetCompanyByGuid(v.CompanyID);
+            }
+
+            //Employes
+            sqlProcessing.GetEmployees(Employes);
+            foreach(var v in Employes)
+            {
+                if(v.DeptID != null)
+                    v.Dept = GetDepartamentByGuid(v.DeptID);
+            }
+            #endregion
+        }
+
+        public Company GetCompanyByGuid(Guid guid)
+        {
+            foreach (var v in Companies)
+                if (v.ID == guid)
+                    return v;
+
+            return null;
+        }
+
+        public Department GetDepartamentByGuid(Guid guid)
+        {
+            foreach (var v in Depts)
+                if (v.ID == guid)
+                    return v;
+
+            return null;
         }
 
         private void OnAddCommandExecute(object obj)

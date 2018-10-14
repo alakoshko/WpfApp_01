@@ -9,6 +9,13 @@ namespace WpfApp_01
 {
     public class Company : ViewModel
     {
+        private Guid _ID;
+        public Guid ID
+        {
+            get { return _ID; }
+            set => Set(ref _ID, value);
+        }
+
         private string name;
         public string Name
         {
