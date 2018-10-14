@@ -14,7 +14,7 @@ namespace WpfApp_01.DataManagement
 
         private SqlConnection connection;
 
-        public SQLProcessing()
+        internal SQLProcessing()
         {
             
             //Не находит класс System.Configuration.ConfigurationManager - глюк, блин.
@@ -29,7 +29,7 @@ namespace WpfApp_01.DataManagement
         }
 
         
-        public void GetEmployees(ObservableCollection<Employee> employees)
+        internal void GetEmployees(ObservableCollection<Employee> employees)
         {
             //var Emps = new List<Employee>();
 
@@ -97,7 +97,31 @@ namespace WpfApp_01.DataManagement
             //return Emps;
         }
 
-        public void GetDepartments(ObservableCollection<Department> dept)
+        internal Guid AddEmployee(Employee employee)
+        {
+            var sql_insert = $@"INSERT INTO Employes (Name, LastName, Patronymic, Birthday, Age, DeptID, PositionID, Salary) 
+OUTPUT INSERTED.ID
+VALUES (N'{employee.Name}'
+, N'{employee.Lastname}'
+, N'{employee.Patronymic}'
+, '{employee.Birthday}'
+, {employee.Age}
+, {employee.DeptID}
+, {employee.PositionID}
+, {employee.Salary}
+)";
+
+            using (var connection = new SqlConnection(connection_string))
+            {
+                connection.Open();
+
+                var command = new SqlCommand(sql_insert, connection);
+
+                return (Guid)command.ExecuteScalar();
+            }
+        }
+
+        internal void GetDepartments(ObservableCollection<Department> dept)
         {
             #region sql
             var sql_select = "SELECT * FROM dbo.Departaments";
@@ -137,7 +161,7 @@ namespace WpfApp_01.DataManagement
             //return Emps;
         }
 
-        public void GetCompanies(ObservableCollection<Company> companies)
+        internal void GetCompanies(ObservableCollection<Company> companies)
         {
             #region sql
             var sql_select = "SELECT * FROM dbo.Company";

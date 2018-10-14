@@ -20,7 +20,6 @@ namespace WpfApp_01
     public partial class DepartmentEditor : Window
     {
         private Department dept;
-        private Company company;
 
         DepartmentEditor(Department department)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WpfApp_01.DataManagement;
 
 namespace WpfApp_01
 {
@@ -19,51 +21,53 @@ namespace WpfApp_01
     /// </summary>
     public partial class EmployerEdit : Window
     {
-        private Employee employee;
+        private ObservableCollection<Employee> Employes { get; }
+        public Employee employee;
         private bool newEmployee = false;
 
-        public EmployerEdit() {
+        public EmployerEdit(ObservableCollection<Employee> employes) {
             InitializeComponent();
-            Init();
+            //Init();
+            Employes = employes;
             employee = new Employee();
             newEmployee = true;
         }
 
-        public EmployerEdit(Employee emp)
+        public EmployerEdit(ObservableCollection<Employee> employes, Employee emp)
         {
             InitializeComponent();
-            Init();
+            //Init();
             this.employee = emp;
             if (emp != null)
             {
-                Lastname.Text = emp.Lastname;
-                Firstname.Text = emp.Name;
-                Patronymic.Text = emp.Patronymic;
-                Dept.SelectedItem = emp.Dept;
-
                 newEmployee = false;
             }
         }
 
-        private void Init()
-        {
-            //Dept.DisplayMemberPath = "Name";
-            //Dept.SelectedValuePath = "ID";
-            Dept.ItemsSource = null;
-            //Dept.ItemsSource = MainWindow.Depts; // Set data source which has all items
-            
-        }
-
         private void btnSave_Click(object sender, RoutedEventArgs e)
         { 
-            employee.Lastname = Lastname.Text;
-            employee.Name = Firstname.Text;
-            employee.Patronymic = Patronymic.Text;
-            //employee.department = (Department)Dept.SelectedItem;
+            //employee.Lastname = Lastname.Text;
+            //employee.Name = Name.Text;
+            //employee.Patronymic = Patronymic.Text;
+            ////employee.Position = "";
+            ////employee.Salary = 100;
+            ////employee.Age = ;
+            ////employee.Birthday = ;
+            ////employee.Dept = ;
+            ////employee.department = (Department)Dept.SelectedItem;
 
             //if (newEmployee)
-            //    MainWindow.Personal.Add(employee);
-   
+            //{
+            //    var sqlProcessing = new SQLProcessing();
+            //    employee.ID = sqlProcessing.AddEmployee(employee);
+
+            //    Employes.Add(employee);
+            //}
+            //else
+            //{
+
+            //}
+
             this.Close();
         }
     }

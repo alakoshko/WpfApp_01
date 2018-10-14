@@ -40,13 +40,14 @@ namespace WpfApp_01
         public ICommand AddCommand { get; }
         public ICommand RemoveCommand { get; }
         public ICommand EditCommand { get; }
-
+        public ICommand SaveEmployeeCommand { get; }
 
         public MainWindowViewModel()
         {
             AddCommand = new LambdaCommand(OnAddCommandExecute);
             RemoveCommand = new LambdaCommand(OnRemoveCommandExecute);
             EditCommand = new LambdaCommand(OnEditCommandExecute);
+            SaveEmployeeCommand = new LambdaCommand(OnSaveEmployeeCommandExecute);
 
             #region Загрузка из БД
             var sqlProcessing = new SQLProcessing();
@@ -72,7 +73,7 @@ namespace WpfApp_01
             #endregion
         }
 
-        public Company GetCompanyByGuid(Guid guid)
+        private Company GetCompanyByGuid(Guid guid)
         {
             foreach (var v in Companies)
                 if (v.ID == guid)
@@ -81,7 +82,7 @@ namespace WpfApp_01
             return null;
         }
 
-        public Department GetDepartamentByGuid(Guid guid)
+        private Department GetDepartamentByGuid(Guid guid)
         {
             foreach (var v in Depts)
                 if (v.ID == guid)
@@ -94,7 +95,7 @@ namespace WpfApp_01
         {
             //MessageBox.Show("Команда редактирования");
 
-            var employersEditor = new EmployerEdit();
+            var employersEditor = new EmployerEdit(Employes);
             employersEditor.Title = $"Редактор карточки работника";
             employersEditor.ShowDialog();
         }
@@ -112,8 +113,6 @@ namespace WpfApp_01
                     }
             }
             else { MessageBox.Show("Команда удаления не будет обработана"); }
-                        
-
         }
 
         private void OnEditCommandExecute(object obj)
@@ -121,16 +120,27 @@ namespace WpfApp_01
             //MessageBox.Show("Команда редактирования");
             if (obj != null)
             {
+                //Это не эффективно, но на поиски решений времени нет
                 foreach (var v in Employes)
                     if (v.ID.ToString() == obj.ToString())
                     {
-                        var employersEditor = new EmployerEdit(v);
+                        var employersEditor = new EmployerEdit(Employes, v);
                         employersEditor.Title = $"Редактор карточки работника";
                         employersEditor.ShowDialog();
                         break;
                     }
             }
             
+        }
+
+        private void OnSaveEmployeeCommandExecute(object obj)
+        {
+            MessageBox.Show("Команда сохранения");
+            if (obj != null)
+            {
+                //Employes = obj;
+            }
+
         }
     }
 }
