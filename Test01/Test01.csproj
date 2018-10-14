@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FF6D595A-076C-4475-9AED-9B4B971EDD68}</ProjectGuid>
+    <ProjectGuid>{5D82A4F4-26F1-496E-B8F9-EB827BAB8EDB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>WpfApp_01</RootNamespace>
-    <AssemblyName>WpfApp_01</AssemblyName>
+    <RootNamespace>Test01</RootNamespace>
+    <AssemblyName>Test01</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -55,17 +55,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DataManagement\SQLProcessing.cs" />
-    <Compile Include="DepartmentEditor.xaml.cs">
-      <DependentUpon>DepartmentEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MVVM\LambdaCommand.cs" />
-    <Compile Include="MVVM\MainWindowViewModel.cs" />
-    <Compile Include="MVVM\ViewModel.cs" />
-    <Page Include="EmployerEdit.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -74,22 +63,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\Department.cs" />
-    <Compile Include="Data\Employee.cs" />
-    <Compile Include="EmployerEdit.xaml.cs">
-      <DependentUpon>EmployerEdit.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="DepartmentEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\Company.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

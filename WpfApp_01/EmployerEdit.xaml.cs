@@ -29,17 +29,17 @@ namespace WpfApp_01
             newEmployee = true;
         }
 
-        public EmployerEdit(Employee employee)
+        public EmployerEdit(Employee emp)
         {
             InitializeComponent();
             Init();
-            this.employee = employee;
-            if (employee != null)
+            this.employee = emp;
+            if (emp != null)
             {
-                Lastname.Text = employee.Lastname;
-                Firstname.Text = employee.Name;
-                Patronymic.Text = employee.Patronymic;
-                Dept.SelectedItem = employee.department; // It will make it as a selected item
+                Lastname.Text = emp.Lastname;
+                Firstname.Text = emp.Name;
+                Patronymic.Text = emp.Patronymic;
+                Dept.SelectedItem = emp.Dept;
 
                 newEmployee = false;
             }
@@ -59,7 +59,7 @@ namespace WpfApp_01
             employee.Lastname = Lastname.Text;
             employee.Name = Firstname.Text;
             employee.Patronymic = Patronymic.Text;
-            employee.department = (Department)Dept.SelectedItem;
+            //employee.department = (Department)Dept.SelectedItem;
 
             //if (newEmployee)
             //    MainWindow.Personal.Add(employee);

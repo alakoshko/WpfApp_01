@@ -5,10 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp_01"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="619.744">
-    <!--DataContext="{Binding RelativeSource={RelativeSource Self}}"-->
+        Title="Редактор персонала" Height="450" Width="619.744">
     <Window.DataContext>
-        <local:Department/>
+        <local:MainWindowViewModel/>
     </Window.DataContext>
 
     <DockPanel>
@@ -36,50 +35,69 @@
             </StatusBarItem>
             <!--<ProgressBar Width="150" Height="15" Maximum="100" Value="{Binding ElementName=ValueSlider, Path=Value}"/>-->
         </StatusBar>
-        <Grid>
-            <Button Name="btnEditDepts" Content="Редактировать департаменты" HorizontalAlignment="Left" Margin="415,10,0,0" VerticalAlignment="Top" Width="185" Click="btnEditDepts_Click" Height="22"/>
-            <Button Name="btnAddEmpl" Content="Добавить работника" HorizontalAlignment="Left" Margin="415,63,0,0" VerticalAlignment="Top" Width="185" Click="btnAddEmpl_Click"/>
 
-            <ComboBox x:Name="comboDepts" HorizontalAlignment="Left" Margin="12,10,0,0" VerticalAlignment="Top" Width="398" 
-                      
+
+
+        <UniformGrid DockPanel.Dock="Top" Columns="2" Margin="10" >
+            <ComboBox x:Name="comboDepts"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10" Width="250"
+                      ItemsSource="{Binding Depts}"
+                      SelectedItem="{Binding ElementName=dtGrid, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+
                       />
             <!--DropDownClosed="comboDepts_DropDownClosed"-->
 
             <!--Text="{Binding ElementName=listViewPersonal, Path=SelectedItem}"-->
+            <Button Name="btnEditDepts" Content="Редактировать департаменты" Height="22" Width="Auto"
+                    Click="btnEditDepts_Click" Margin="10" />
+        </UniformGrid>
+        <UniformGrid DockPanel.Dock="Bottom" Columns="3" Margin="10">
+            <Button Content="Добавить" Margin="10" Command="{Binding AddCommand}"/>
+            <Button IsEnabled="False" Content="Удалить" Margin="10" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.RemoveCommand}" CommandParameter="{Binding ID}" />
+            <Button IsEnabled="False" Content="Редактировать" Margin="10" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.EditCommand}" CommandParameter="{Binding ID}"/>
+        </UniformGrid>
 
 
-            <ListView x:Name="listViewPersonal" HorizontalAlignment="Left" Height="321" Margin="10,88,0,0" VerticalAlignment="Top" Width="590"
-                  ItemsSource="{Binding Employes}" 
-                      
-                      
-                       MouseDoubleClick="listViewPersonal_MouseDoubleClick"
-                  VirtualizingPanel.IsVirtualizing="True" 
-                  VirtualizingPanel.VirtualizationMode="Recycling">
-                <!--<ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Position" Width="150" DisplayMemberBinding="{Binding Position}" />
-                    <GridViewColumn Header="Lastname" Width="150" DisplayMemberBinding="{Binding Lastname}" />
-                    <GridViewColumn Header="Name" Width="120" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Header="Patronymic" Width="150" DisplayMemberBinding="{Binding Patronymic}" />
-                </GridView>
-            </ListView.View>-->
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel/>
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Должность" Width="100" DisplayMemberBinding="{Binding Position}"/>
-                        <GridViewColumn Header="Фамилия" Width="100" DisplayMemberBinding="{Binding Lastname}"/>
-                        <GridViewColumn Header="Имя" Width="100" DisplayMemberBinding="{Binding Name}"/>
-                        <GridViewColumn Header="Отчество" Width="100" DisplayMemberBinding="{Binding Patronymic}"/>
-                        <GridViewColumn Header="Возраст" Width="30" DisplayMemberBinding="{Binding Age}"/>
-                        <GridViewColumn Header="Зарплата" Width="70" DisplayMemberBinding="{Binding Salary}"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </Grid>
+        <DataGrid Name="dtGrid" ItemsSource="{Binding Employes}" AutoGenerateColumns="False" Margin="0,10,0,0">
+            <DataGrid.Resources>
+                <DataTemplate x:Key="DeptDisplayTemplate" DataType="vm:GridItem">
+                    <TextBlock Text="{Binding Dept}" />
+                </DataTemplate>
+                <DataTemplate x:Key="DeptEditingTemplate" DataType="vm:GridItem">
+                    <ComboBox SelectedItem="{Binding Dept}"
+                              ItemsSource="{Binding DataContext.Depts, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" />
+                    <!--ItemsSource="{Binding Depts}" />-->
+                </DataTemplate>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <!--<DataGridTextColumn Header="ID" Binding="{Binding ID}" />-->
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding Lastname}" />
+                <DataGridTextColumn Header="Имя" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}" />
+                <DataGridTextColumn Header="Возраст" Binding="{Binding Age}" />
+                <DataGridTemplateColumn CellTemplate="{StaticResource DeptDisplayTemplate}"
+								CellEditingTemplate="{StaticResource DeptEditingTemplate}" />
+                <DataGridTextColumn Header="Должность" Binding="{Binding Position}" />
+                <DataGridTextColumn Header="Зарплата" Binding="{Binding Salary}" />
+                <DataGridTemplateColumn Header="Удалить" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="model:Employes">
+                            <Button Content="Удалить" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.RemoveCommand}" CommandParameter="{Binding ID}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Изменить" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="model:Employes">
+                            <Button Content="Изменить" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.EditCommand}" CommandParameter="{Binding ID}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+
 
     </DockPanel>
 </Window>
+
