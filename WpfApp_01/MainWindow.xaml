@@ -5,23 +5,93 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp_01"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="619.744">
-    <Grid Margin="0,0,2,0">
-        <ComboBox x:Name="comboDepts" HorizontalAlignment="Left" Margin="12,10,0,0" VerticalAlignment="Top" Width="398" 
-                  DropDownClosed="comboDepts_DropDownClosed"/>
-        <ListView x:Name="listViewPersonal" HorizontalAlignment="Left" Height="321" Margin="10,88,0,0" VerticalAlignment="Top" Width="590"
-                  ItemsSource="{Binding}" MouseDoubleClick="listViewPersonal_MouseDoubleClick">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Position" Width="150" DisplayMemberBinding="{Binding Position}" />
-                    <GridViewColumn Header="Lastname" Width="150" DisplayMemberBinding="{Binding Lastname}" />
-                    <GridViewColumn Header="Name" Width="120" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Header="Patronymic" Width="150" DisplayMemberBinding="{Binding Patronymic}" />
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <Button Name="btnEditDepts" Content="Редактировать департаменты" HorizontalAlignment="Left" Margin="415,12,0,0" VerticalAlignment="Top" Width="185" Click="btnEditDepts_Click"/>
-        <Button Name="btnAddEmpl" Content="Добавить работника" HorizontalAlignment="Left" Margin="415,63,0,0" VerticalAlignment="Top" Width="185" Click="btnAddEmpl_Click"/>
+        Title="Редактор персонала" Height="450" Width="619.744">
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
 
-    </Grid>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Create"/>
+                <MenuItem Header="Open"/>
+                <MenuItem Header="Save"/>
+                <MenuItem Header="Close"/>
+                <Separator/>
+                <MenuItem Header="Exit" Click="MenuItem_Click"/>
+            </MenuItem>
+            <MenuItem Header="Tools" IsEnabled="False"/>
+            <MenuItem Header="Help">
+                <MenuItem Header="About"/>
+            </MenuItem>
+            <MenuItem>
+                <TextBlock Text="{Binding Value, ElementName=ValueSlider, StringFormat='Число pi = {0:0.00#}!!!'}"/>
+                <TextBlock Text="{Binding Value, ElementName=ValueSlider, StringFormat='{}{0:f5} = pi'}"/>
+            </MenuItem>
+        </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Name="Status" Text="Redy"/>
+            </StatusBarItem>
+            <!--<ProgressBar Width="150" Height="15" Maximum="100" Value="{Binding ElementName=ValueSlider, Path=Value}"/>-->
+        </StatusBar>
+
+
+
+        <UniformGrid DockPanel.Dock="Top" Columns="2" Margin="10" >
+            <ComboBox x:Name="comboDepts"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10" Width="250"
+                      ItemsSource="{Binding Depts}"
+                      SelectedItem="{Binding ElementName=dtGrid, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+
+                      />
+            <!--DropDownClosed="comboDepts_DropDownClosed"-->
+
+            <!--Text="{Binding ElementName=listViewPersonal, Path=SelectedItem}"-->
+            <Button Name="btnEditDepts" Content="Редактировать департаменты" Height="22" Width="Auto"
+                    Click="btnEditDepts_Click" Margin="10" />
+        </UniformGrid>
+        <UniformGrid DockPanel.Dock="Bottom" Columns="3" Margin="10">
+            <Button Content="Добавить" Margin="10" Command="{Binding AddCommand}"/>
+            <Button Content="Удалить" Margin="10" Command="{Binding RemoveCommand}" CommandParameter="{Binding SelectedEmployer}" />
+            <Button Content="Изменить" Margin="10" Command="{Binding EditCommand}" CommandParameter="{Binding SelectedEmployer}"/>
+        </UniformGrid>
+
+
+        <DataGrid Name="dtGrid" ItemsSource="{Binding Employes}" AutoGenerateColumns="False" Margin="0,10,0,0"
+                  CellEditEnding="dtGrid_CellEditEnding"
+                  RowEditEnding="dtGrid_RowEditEnding" 
+                  SelectedItem="{Binding SelectedEmployer}"
+                  >
+            <!--SelectionChanged="dtGrid_SelectionChanged"-->
+
+            <DataGrid.Resources>
+                <DataTemplate x:Key="DeptDisplayTemplate" DataType="vm:GridItem">
+                    <TextBlock Text="{Binding Dept}" />
+                </DataTemplate>
+                <DataTemplate x:Key="DeptEditingTemplate" DataType="vm:GridItem">
+                    <ComboBox SelectedItem="{Binding Dept}"
+                              ItemsSource="{Binding DataContext.Depts, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" />
+                    <!--ItemsSource="{Binding Depts}" />-->
+                </DataTemplate>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <!--<DataGridTextColumn Header="ID" Binding="{Binding ID}" />-->
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding Lastname, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Имя" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}" />
+                <DataGridTextColumn Header="Возраст" Binding="{Binding Age}" />
+                <DataGridTemplateColumn CellTemplate="{StaticResource DeptDisplayTemplate}"
+								CellEditingTemplate="{StaticResource DeptEditingTemplate}" />
+                <DataGridTextColumn Header="Должность" Binding="{Binding Position}" />
+                <DataGridTextColumn Header="Зарплата" Binding="{Binding Salary}" />
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+
+
+    </DockPanel>
+
 </Window>
+

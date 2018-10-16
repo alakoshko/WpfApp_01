@@ -55,9 +55,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataManagement\SQLProcessing.cs" />
     <Compile Include="DepartmentEditor.xaml.cs">
       <DependentUpon>DepartmentEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MVVM\LambdaCommand.cs" />
+    <Compile Include="MVVM\MainWindowViewModel.cs" />
+    <Compile Include="MVVM\ViewModel.cs" />
     <Page Include="EmployerEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -70,8 +74,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Department.cs" />
-    <Compile Include="Employee.cs" />
+    <Compile Include="Data\Department.cs" />
+    <Compile Include="Data\Employee.cs" />
     <Compile Include="EmployerEdit.xaml.cs">
       <DependentUpon>EmployerEdit.xaml</DependentUpon>
     </Compile>
@@ -85,7 +89,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Company.cs" />
+    <Compile Include="Data\Company.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

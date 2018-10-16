@@ -20,25 +20,29 @@ namespace WpfApp_01
     public partial class DepartmentEditor : Window
     {
         private Department dept;
-        public DepartmentEditor()
+
+        DepartmentEditor(Department department)
         {
+            dept = department;
+
             InitializeComponent();
-            lstViewDepts.ItemsSource = MainWindow.Depts;
-            cmbCompany.ItemsSource = MainWindow.Companys;
+            
+            //lstViewDepts.ItemsSource = ;
+            //cmbCompany.ItemsSource = /*company*/;
         }
 
 
         private void lstViewDepts_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             dept = (Department)lstViewDepts.SelectedItem;
-            Name.Text = dept.Name;
+            Name.Text = dept.DeptName;
             //почему-то не работает...
-            cmbCompany.SelectedItem = dept.Company;
+            //cmbCompany.SelectedItem = dept.Company;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.Depts.Add(new Department("новый департамент"));
+            ////dept.Add(new Department("новый департамент"));
             CollectionViewSource.GetDefaultView(lstViewDepts.ItemsSource).Refresh();
         }
 
@@ -46,8 +50,8 @@ namespace WpfApp_01
         {
             if (dept != null)
             {
-                dept.Name = Name.Text;
-                dept.Company = (Company)cmbCompany.SelectedItem;
+                dept.DeptName = Name.Text;
+                //dept.Company = (Company)cmbCompany.SelectedItem;
                 CollectionViewSource.GetDefaultView(lstViewDepts.ItemsSource).Refresh();
                 CollectionViewSource.GetDefaultView(cmbCompany.ItemsSource).Refresh();
             }

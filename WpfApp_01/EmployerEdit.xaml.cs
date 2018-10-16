@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WpfApp_01.DataManagement;
 
 namespace WpfApp_01
 {
@@ -19,54 +21,54 @@ namespace WpfApp_01
     /// </summary>
     public partial class EmployerEdit : Window
     {
-        private Employee employee;
+        private ObservableCollection<Employee> _Employes;
+        //private ObservableCollection<Department> _Depts;
+        //private ObservableCollection<Company> _Companies;
+        public Employee _SelectedEmployer;
+
+        //public Employee employee;
         private bool newEmployee = false;
 
-        public EmployerEdit() {
-            InitializeComponent();
-            Init();
-            employee = new Employee();
-            newEmployee = true;
-        }
 
         public EmployerEdit(Employee employee)
         {
             InitializeComponent();
-            Init();
-            this.employee = employee;
-            if (employee != null)
-            {
-                Lastname.Text = employee.Lastname;
-                Firstname.Text = employee.Name;
-                Patronymic.Text = employee.Patronymic;
-                Dept.SelectedItem = employee.department; // It will make it as a selected item
+            _SelectedEmployer = employee;
+            _Employes = (this.DataContext as MainWindowViewModel).Employes;
+            //_Depts = (this.DataContext as MainWindowViewModel).Depts;
+            //_Companies = (this.DataContext as MainWindowViewModel).Companies;
 
+            if (_SelectedEmployer != null)
+            {
                 newEmployee = false;
+
+                #region Employee fields
+                ID.Content = _SelectedEmployer.ID;
+                Lastname.Text = _SelectedEmployer.Lastname;
+                Name.Text = _SelectedEmployer.Name;
+                Patronymic.Text = _SelectedEmployer.Patronymic;
+                Age.Text = _SelectedEmployer.Age.ToString();
+                Dept.SelectedItem = _SelectedEmployer.Dept;
+                Salary.Text = _SelectedEmployer.strSalary;
+                Dept.ItemsSource = (this.DataContext as MainWindowViewModel).Depts;
+                Dept.SelectedItem = _SelectedEmployer.Dept;
+                #endregion
             }
         }
-
-        private void Init()
-        {
-            //Dept.DisplayMemberPath = "Name";
-            //Dept.SelectedValuePath = "ID";
-            Dept.ItemsSource = null;
-            Dept.ItemsSource = MainWindow.Depts; // Set data source which has all items
-            
-        }
-
+        
         private void btnSave_Click(object sender, RoutedEventArgs e)
-        { 
-            employee.Lastname = Lastname.Text;
-            employee.Name = Firstname.Text;
-            employee.Patronymic = Patronymic.Text;
-            employee.department = (Department)Dept.SelectedItem;
+        {
+            _SelectedEmployer.Lastname = Lastname.Text;
+            _SelectedEmployer.Name = Name.Text;
+            _SelectedEmployer.Patronymic = Patronymic.Text;
 
-            if (newEmployee)
-                MainWindow.Personal.Add(employee);
-            //MainWindow.dictEmplotyeers[employee.ID].Lastname = Lastname.Text;
-            //MainWindow.dictEmplotyeers[employee.ID].Name = Firstname.Text;
-            //MainWindow.dictEmplotyeers[employee.ID].Patronymic = Patronymic.Text;
-            //MainWindow.dictEmplotyeers[employee.ID].department = (Department)Dept.SelectedItem;
+            //_SelectedEmployer.Position = Position.SelectedItem.ToString();
+            _SelectedEmployer.Salary = double.Parse(Salary.Text);
+            _SelectedEmployer.Age = int.Parse(Age.Text);
+            //_SelectedEmployer.Birthday = ;
+            _SelectedEmployer.Dept = Dept.SelectedItem as Department;
+
+            this.DialogResult = true;
             this.Close();
         }
     }
