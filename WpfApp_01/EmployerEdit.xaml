@@ -9,38 +9,40 @@
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
-    <WrapPanel Orientation="Vertical" >
+    <WrapPanel Orientation="Vertical" DataContext="{Binding SelectedEmployer}">
         <Border Height="100" Width="100" >
             <Image x:Name="emplImg" Height="100" Width="100" HorizontalAlignment="Left" Stretch="Fill" Margin="10,10,0,0"/>
         </Border>
         <Border>
             <Grid Margin="10" Width="400" Height="234" >
-                <Label Content="{Binding Employes/ID}" HorizontalAlignment="Left" Margin="220,10,0,0" VerticalAlignment="Top" Width="200"/>
+                <Label x:Name="ID" Content="{Binding ID}" HorizontalAlignment="Left" Margin="220,10,0,0" VerticalAlignment="Top" Width="200"/>
                 <TextBox x:Name ="Lastname" HorizontalAlignment="Left" Width="206" Height="20" Margin="10,10,0,0" 
                          TextWrapping="Wrap" VerticalAlignment="Top" 
-                         Text="{Binding Employes/Lastname}" />
+                         Text="" />
                 <TextBox x:Name ="Name" HorizontalAlignment="Left" Height="20" Margin="10,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="206"
-                         Text="{Binding Employes/Name}"/>
+                         Text=""/>
                 <TextBox x:Name ="Patronymic" HorizontalAlignment="Left" Height="20" Margin="10,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="206"
-                         Text="{Binding Employes/Patronymic}"/>
+                         Text=""/>
                 <Label Content="Департамент:" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" Width="90"/>
                 <ComboBox x:Name="Dept" HorizontalAlignment="Left" Height="20" Margin="95,105,0,0" VerticalAlignment="Top" Width="206" 
-                          ItemsSource="{Binding Depts}"
-                          SelectedItem="{Binding Employes/Dept}"/>
+                      ItemsSource="{Binding Depts}"
+                          SelectedItem=""/>
                 <Label Content="Должность:" HorizontalAlignment="Left" Margin="10,135,0,0" VerticalAlignment="Top" Width="90"/>
                 <ComboBox Name="Position" HorizontalAlignment="Left" Margin="95,139,0,0" VerticalAlignment="Top" Width="206"/>
-                
+
                 <Label Content="Возраст:" HorizontalAlignment="Left" Margin="10,165,0,0" VerticalAlignment="Top" Width="60"/>
                 <TextBox x:Name ="Age" HorizontalAlignment="Left" Height="20" Margin="65,170,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="30"
-                         Text="{Binding Employes/Age}"/>
+                         Text=""/>
 
                 <Label Content="Зарплата:" HorizontalAlignment="Left" Margin="100,165,0,0" VerticalAlignment="Top" Width="60"/>
                 <TextBox x:Name ="Salary" HorizontalAlignment="Left" Height="20" Margin="165,170,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="51"
-                         Text="{Binding Employes/Salary}"/>
-                
-                <Button Name="btnSave" Content="Сохранить" HorizontalAlignment="Left" Height="20" Margin="10,210,0,0" VerticalAlignment="Top" Width="75" 
+                         Text="0.00" />
+
+                <Button Name="btnSave" Content="Сохранить" HorizontalAlignment="Left" Height="20" Margin="10,210,0,0" VerticalAlignment="Top" Width="75"
                         Click="btnSave_Click"
-                        Command="{Binding SaveEmployeeCommand}" CommandParameter="{Binding Employes/ID}"/>
+                        />
+                <!---->
+
                 <Button Content="Отмена" IsCancel="True" HorizontalAlignment="Left" Margin="226,210,0,0" VerticalAlignment="Top" Width="75"/>
             </Grid>
         </Border>

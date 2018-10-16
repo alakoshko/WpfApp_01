@@ -68,6 +68,9 @@ namespace WpfApp_01
             set => Set(ref salary, value);
         }
 
+        public string strSalary { get => salary.ToString();
+                }
+
         private string position;
         public string Position
         {

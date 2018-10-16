@@ -52,12 +52,18 @@
         </UniformGrid>
         <UniformGrid DockPanel.Dock="Bottom" Columns="3" Margin="10">
             <Button Content="Добавить" Margin="10" Command="{Binding AddCommand}"/>
-            <Button IsEnabled="False" Content="Удалить" Margin="10" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.RemoveCommand}" CommandParameter="{Binding ID}" />
-            <Button IsEnabled="False" Content="Редактировать" Margin="10" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.EditCommand}" CommandParameter="{Binding ID}"/>
+            <Button Content="Удалить" Margin="10" Command="{Binding RemoveCommand}" CommandParameter="{Binding SelectedEmployer}" />
+            <Button Content="Изменить" Margin="10" Command="{Binding EditCommand}" CommandParameter="{Binding SelectedEmployer}"/>
         </UniformGrid>
 
 
-        <DataGrid Name="dtGrid" ItemsSource="{Binding Employes}" AutoGenerateColumns="False" Margin="0,10,0,0">
+        <DataGrid Name="dtGrid" ItemsSource="{Binding Employes}" AutoGenerateColumns="False" Margin="0,10,0,0"
+                  CellEditEnding="dtGrid_CellEditEnding"
+                  RowEditEnding="dtGrid_RowEditEnding" 
+                  SelectedItem="{Binding SelectedEmployer}"
+                  >
+            <!--SelectionChanged="dtGrid_SelectionChanged"-->
+
             <DataGrid.Resources>
                 <DataTemplate x:Key="DeptDisplayTemplate" DataType="vm:GridItem">
                     <TextBlock Text="{Binding Dept}" />
@@ -70,7 +76,7 @@
             </DataGrid.Resources>
             <DataGrid.Columns>
                 <!--<DataGridTextColumn Header="ID" Binding="{Binding ID}" />-->
-                <DataGridTextColumn Header="Фамилия" Binding="{Binding Lastname}" />
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding Lastname, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Имя" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}" />
                 <DataGridTextColumn Header="Возраст" Binding="{Binding Age}" />
@@ -78,20 +84,7 @@
 								CellEditingTemplate="{StaticResource DeptEditingTemplate}" />
                 <DataGridTextColumn Header="Должность" Binding="{Binding Position}" />
                 <DataGridTextColumn Header="Зарплата" Binding="{Binding Salary}" />
-                <DataGridTemplateColumn Header="Удалить" Width="Auto">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate DataType="model:Employes">
-                            <Button Content="Удалить" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.RemoveCommand}" CommandParameter="{Binding ID}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Изменить" Width="Auto">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate DataType="model:Employes">
-                            <Button Content="Изменить" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.EditCommand}" CommandParameter="{Binding ID}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+
             </DataGrid.Columns>
         </DataGrid>
 
@@ -99,5 +92,6 @@
 
 
     </DockPanel>
+
 </Window>
 

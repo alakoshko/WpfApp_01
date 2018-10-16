@@ -21,53 +21,54 @@ namespace WpfApp_01
     /// </summary>
     public partial class EmployerEdit : Window
     {
-        private ObservableCollection<Employee> Employes { get; }
-        public Employee employee;
+        private ObservableCollection<Employee> _Employes;
+        //private ObservableCollection<Department> _Depts;
+        //private ObservableCollection<Company> _Companies;
+        public Employee _SelectedEmployer;
+
+        //public Employee employee;
         private bool newEmployee = false;
 
-        public EmployerEdit(ObservableCollection<Employee> employes) {
-            InitializeComponent();
-            //Init();
-            Employes = employes;
-            employee = new Employee();
-            newEmployee = true;
-        }
 
-        public EmployerEdit(ObservableCollection<Employee> employes, Employee emp)
+        public EmployerEdit(Employee employee)
         {
             InitializeComponent();
-            //Init();
-            this.employee = emp;
-            if (emp != null)
+            _SelectedEmployer = employee;
+            _Employes = (this.DataContext as MainWindowViewModel).Employes;
+            //_Depts = (this.DataContext as MainWindowViewModel).Depts;
+            //_Companies = (this.DataContext as MainWindowViewModel).Companies;
+
+            if (_SelectedEmployer != null)
             {
                 newEmployee = false;
+
+                #region Employee fields
+                ID.Content = _SelectedEmployer.ID;
+                Lastname.Text = _SelectedEmployer.Lastname;
+                Name.Text = _SelectedEmployer.Name;
+                Patronymic.Text = _SelectedEmployer.Patronymic;
+                Age.Text = _SelectedEmployer.Age.ToString();
+                Dept.SelectedItem = _SelectedEmployer.Dept;
+                Salary.Text = _SelectedEmployer.strSalary;
+                Dept.ItemsSource = (this.DataContext as MainWindowViewModel).Depts;
+                Dept.SelectedItem = _SelectedEmployer.Dept;
+                #endregion
             }
         }
-
+        
         private void btnSave_Click(object sender, RoutedEventArgs e)
-        { 
-            //employee.Lastname = Lastname.Text;
-            //employee.Name = Name.Text;
-            //employee.Patronymic = Patronymic.Text;
-            ////employee.Position = "";
-            ////employee.Salary = 100;
-            ////employee.Age = ;
-            ////employee.Birthday = ;
-            ////employee.Dept = ;
-            ////employee.department = (Department)Dept.SelectedItem;
+        {
+            _SelectedEmployer.Lastname = Lastname.Text;
+            _SelectedEmployer.Name = Name.Text;
+            _SelectedEmployer.Patronymic = Patronymic.Text;
 
-            //if (newEmployee)
-            //{
-            //    var sqlProcessing = new SQLProcessing();
-            //    employee.ID = sqlProcessing.AddEmployee(employee);
+            //_SelectedEmployer.Position = Position.SelectedItem.ToString();
+            _SelectedEmployer.Salary = double.Parse(Salary.Text);
+            _SelectedEmployer.Age = int.Parse(Age.Text);
+            //_SelectedEmployer.Birthday = ;
+            _SelectedEmployer.Dept = Dept.SelectedItem as Department;
 
-            //    Employes.Add(employee);
-            //}
-            //else
-            //{
-
-            //}
-
+            this.DialogResult = true;
             this.Close();
         }
     }

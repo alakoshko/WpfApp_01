@@ -24,5 +24,7 @@ namespace WpfApp_01
             OnPropertyChanged(PropertyName);
             return true;
         }
+
+        
     }
 }

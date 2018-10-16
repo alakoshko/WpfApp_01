@@ -99,17 +99,35 @@ namespace WpfApp_01.DataManagement
 
         internal Guid AddEmployee(Employee employee)
         {
-            var sql_insert = $@"INSERT INTO Employes (Name, LastName, Patronymic, Birthday, Age, DeptID, PositionID, Salary) 
+            if (employee != null)
+            {
+                var sql_insert = $@"INSERT INTO Employes (Name, LastName, Patronymic, Birthday, Age, DeptID, PositionID, Salary) 
 OUTPUT INSERTED.ID
 VALUES (N'{employee.Name}'
 , N'{employee.Lastname}'
 , N'{employee.Patronymic}'
 , '{employee.Birthday}'
 , {employee.Age}
-, {employee.DeptID}
-, {employee.PositionID}
+, '{employee.DeptID}'
+, '{employee.PositionID}'
 , {employee.Salary}
 )";
+
+                using (var connection = new SqlConnection(connection_string))
+                {
+                    connection.Open();
+
+                    var command = new SqlCommand(sql_insert, connection);
+
+                    return (Guid)command.ExecuteScalar();
+                }
+            }
+            return new Guid();
+        }
+
+        internal int UpdEmployee(Employee employee)
+        {
+            var sql_insert = $@"Update Employes Set Name = N'{employee.Name}', LastName = N'{employee.Lastname}', Patronymic = N'{employee.Patronymic}', Birthday = '{employee.Birthday}', Age = {employee.Age}, DeptID = '{employee.Dept.ID}', PositionID = '{employee.PositionID}', Salary = {employee.Salary} where ID = '{employee.ID}'";
 
             using (var connection = new SqlConnection(connection_string))
             {
@@ -117,7 +135,7 @@ VALUES (N'{employee.Name}'
 
                 var command = new SqlCommand(sql_insert, connection);
 
-                return (Guid)command.ExecuteScalar();
+                return command.ExecuteNonQuery();
             }
         }
 

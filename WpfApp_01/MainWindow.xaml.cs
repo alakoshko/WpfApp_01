@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfApp_01.DataManagement;
 
 namespace WpfApp_01
 {
@@ -23,8 +24,11 @@ namespace WpfApp_01
         public MainWindow()
         {
             InitializeComponent();
+            
         }
 
+
+        private object objEmpToAdd;
 
         //CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(listViewPersonal.ItemsSource);
         //view.Filter = UserFilter;
@@ -76,6 +80,68 @@ namespace WpfApp_01
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void dtGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            try
+            {
+                //FrameworkElement element_EmpNo = dtGrid.Columns[0].GetCellContent(e.Row);
+                //if (element_EmpNo.GetType() == typeof(TextBox))
+                //{
+                //    var eno = ((TextBox)element_EmpNo).Text;
+                //    e.EmpNo = Convert.ToInt32(eno);
+                //}
+                //FrameworkElement element_EmpName = dtGrid.Columns[1].GetCellContent(e.Row);
+                //if (element_EmpName.GetType() == typeof(TextBox))
+                //{
+                //    var ename = ((TextBox)element_EmpName).Text;
+                //    objEmpToAdd.EmpName = ename;
+                //}
+                //FrameworkElement element_Salary = dtGrid.Columns[2].GetCellContent(e.Row);
+                //if (element_Salary.GetType() == typeof(TextBox))
+                //{
+                //    var salary = ((TextBox)element_Salary).Text;
+                //    objEmpToAdd.Salary = Convert.ToInt32(salary);
+                //}
+                //FrameworkElement element_DeptNo = dtGrid.Columns[3].GetCellContent(e.Row);
+                //if (element_DeptNo.GetType() == typeof(TextBox))
+                //{
+                //    var dno = ((TextBox)element_DeptNo).Text;
+                //    objEmpToAdd.DeptNo = Convert.ToInt32(dno);
+                //}
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void InsertEmpoyee(object obj)
+        {
+            (DataContext as MainWindowViewModel).SelectedEmployer.ID = (DataContext as MainWindowViewModel).sqlProcessing.AddEmployee(obj as Employee);
+            
+        }
+
+        private void dtGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+            try
+            {
+                var Res = MessageBox.Show("Вы уверены что хотите добавить запись?", "Подтверждение", MessageBoxButton.YesNo);
+                if (Res == MessageBoxResult.Yes)
+                {
+                    InsertEmpoyee((DataContext as MainWindowViewModel).SelectedEmployer);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void dtGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            objEmpToAdd = dtGrid.SelectedItem as Employee;
         }
     }
 }

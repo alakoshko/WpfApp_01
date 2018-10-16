@@ -14,11 +14,6 @@ namespace WpfApp_01
     {
 
         public ObservableCollection<Department> Depts { get; } = new ObservableCollection<Department>();
-        //{
-        //    new Department("FrontOffice"){ DeptName = "FrontOffice" },
-        //    new Department{ DeptName = "BackOffice" }
-        //};
-
         public ObservableCollection<Employee> Employes { get; } = new ObservableCollection<Employee>();
         //public ObservableCollection<Employee> Employes { get; } = new ObservableCollection<Employee>
         //{
@@ -30,17 +25,37 @@ namespace WpfApp_01
         //    new Employee{ Name = "Игнат", Lastname = "Черкашин" },
         //    new Employee{ Name = "Якуб", Lastname = "Малиновский" },
         //};
-
+        private Employee _SelectedEmployer;
+        public Employee SelectedEmployer
+        {
+            get { return _SelectedEmployer; }
+            set => Set(ref _SelectedEmployer, value);
+        }
 
         public ObservableCollection<Company> Companies { get; } = new ObservableCollection<Company>();
-        //{
-        //    new Company{ Name = "Sun microsystem" }
-        //};
+        
 
         public ICommand AddCommand { get; }
         public ICommand RemoveCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand SaveEmployeeCommand { get; }
+
+        private LambdaCommand addCommandEmployee;
+        public LambdaCommand AddCommandEmployee
+        {
+            get
+            {
+                return addCommandEmployee ??
+                    (addCommandEmployee = new LambdaCommand(obj =>
+                    {
+                        Employee emp = new Employee();
+                        Employes.Insert(0, emp);
+                        SelectedEmployer = emp;
+                    }));
+            }
+        }
+
+        internal SQLProcessing sqlProcessing;
 
         public MainWindowViewModel()
         {
@@ -50,7 +65,7 @@ namespace WpfApp_01
             SaveEmployeeCommand = new LambdaCommand(OnSaveEmployeeCommandExecute);
 
             #region Загрузка из БД
-            var sqlProcessing = new SQLProcessing();
+            sqlProcessing = new SQLProcessing();
 
             //Company
             sqlProcessing.GetCompanies(Companies);
@@ -60,44 +75,36 @@ namespace WpfApp_01
             foreach (var v in Depts)
             {
                 if (v.CompanyID != null)
-                    v.Company = GetCompanyByGuid(v.CompanyID);
+                    v.Company = Companies.FirstOrDefault(p => p.ID == v.CompanyID);
             }
+            
 
             //Employes
             sqlProcessing.GetEmployees(Employes);
-            foreach(var v in Employes)
+            foreach (var v in Employes)
             {
-                if(v.DeptID != null)
-                    v.Dept = GetDepartamentByGuid(v.DeptID);
+                if (v.DeptID != null)
+                    v.Dept = Depts.FirstOrDefault(p => p.ID == v.DeptID);
             }
+            SelectedEmployer = null;
+
             #endregion
         }
 
-        private Company GetCompanyByGuid(Guid guid)
-        {
-            foreach (var v in Companies)
-                if (v.ID == guid)
-                    return v;
 
-            return null;
-        }
-
-        private Department GetDepartamentByGuid(Guid guid)
-        {
-            foreach (var v in Depts)
-                if (v.ID == guid)
-                    return v;
-
-            return null;
-        }
+           
 
         private void OnAddCommandExecute(object obj)
         {
             //MessageBox.Show("Команда редактирования");
 
-            var employersEditor = new EmployerEdit(Employes);
+            var employersEditor = new EmployerEdit(obj as Employee);
             employersEditor.Title = $"Редактор карточки работника";
-            employersEditor.ShowDialog();
+            var dialogResult = employersEditor.ShowDialog();
+            if (dialogResult is true)
+            {
+                var empID = sqlProcessing.AddEmployee(obj as Employee);
+            }
         }
 
         private void OnRemoveCommandExecute(object obj)
@@ -105,12 +112,9 @@ namespace WpfApp_01
             //MessageBox.Show("Команда удаления");
             if (obj != null)
             {
-                foreach (var v in Employes)
-                    if (v.ID.ToString() == obj.ToString())
-                    {
-                        Employes.Remove(v);
-                        break;
-                    }
+                var emp = Employes.FirstOrDefault(p => p.ID == (obj as Employee).ID);
+                if (emp != null)
+                    Employes.Remove(emp);
             }
             else { MessageBox.Show("Команда удаления не будет обработана"); }
         }
@@ -120,25 +124,22 @@ namespace WpfApp_01
             //MessageBox.Show("Команда редактирования");
             if (obj != null)
             {
-                //Это не эффективно, но на поиски решений времени нет
-                foreach (var v in Employes)
-                    if (v.ID.ToString() == obj.ToString())
-                    {
-                        var employersEditor = new EmployerEdit(Employes, v);
-                        employersEditor.Title = $"Редактор карточки работника";
-                        employersEditor.ShowDialog();
-                        break;
-                    }
+                //SelectedEmployer = obj as Employee;
+                var employersEditor = new EmployerEdit(SelectedEmployer);
+                employersEditor.Title = $"Редактор карточки работника";
+                var dialogResult = employersEditor.ShowDialog();
+                if(dialogResult is true)
+                    OnSaveEmployeeCommandExecute(obj);
             }
-            
         }
 
         private void OnSaveEmployeeCommandExecute(object obj)
         {
-            MessageBox.Show("Команда сохранения");
+            //MessageBox.Show("Команда сохранения");
             if (obj != null)
             {
                 //Employes = obj;
+                sqlProcessing.UpdEmployee(obj as Employee);
             }
 
         }
