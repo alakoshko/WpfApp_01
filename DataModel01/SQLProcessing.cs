@@ -6,16 +6,16 @@ using System.Data;
 using System.Data.SqlClient;
 using DataModel;
 
-namespace WpfApp_01.DataManagement
+namespace DataModel
 {
-    class SQLProcessing
+    public class SQLProcessing
     {
         private const string connection_string =
                 @"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = D:\Документы\GitHub\WpfApp_01\DB\PersonalDB.mdf; Integrated Security = True; Connect Timeout = 30";
 
         private SqlConnection connection;
 
-        internal SQLProcessing()
+        public SQLProcessing()
         {
             
             //Не находит класс System.Configuration.ConfigurationManager - глюк, блин.
@@ -30,7 +30,7 @@ namespace WpfApp_01.DataManagement
         }
 
         
-        internal void GetEmployees(ObservableCollection<Employee> employees)
+        public void GetEmployees(ObservableCollection<Employee> employees)
         {
             //var Emps = new List<Employee>();
 
@@ -98,7 +98,7 @@ namespace WpfApp_01.DataManagement
             //return Emps;
         }
 
-        internal Guid AddEmployee(Employee employee)
+        public Guid AddEmployee(Employee employee)
         {
             if (employee != null)
             {
@@ -126,7 +126,7 @@ VALUES (N'{employee.Name}'
             return new Guid();
         }
 
-        internal int UpdEmployee(Employee employee)
+        public int UpdEmployee(Employee employee)
         {
             var sql_insert = $@"Update Employes Set Name = N'{employee.Name}', LastName = N'{employee.Lastname}', Patronymic = N'{employee.Patronymic}', Birthday = '{employee.Birthday}', Age = {employee.Age}, DeptID = '{employee.Dept.ID}', PositionID = '{employee.PositionID}', Salary = {employee.Salary} where ID = '{employee.ID}'";
 
@@ -140,7 +140,7 @@ VALUES (N'{employee.Name}'
             }
         }
 
-        internal void GetDepartments(ObservableCollection<Department> dept)
+        public void GetDepartments(ObservableCollection<Department> dept)
         {
             #region sql
             var sql_select = "SELECT * FROM dbo.Departaments";
@@ -180,7 +180,7 @@ VALUES (N'{employee.Name}'
             //return Emps;
         }
 
-        internal void GetCompanies(ObservableCollection<Company> companies)
+        public void GetCompanies(ObservableCollection<Company> companies)
         {
             #region sql
             var sql_select = "SELECT * FROM dbo.Company";

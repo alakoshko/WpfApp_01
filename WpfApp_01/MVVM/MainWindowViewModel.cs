@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
-using WpfApp_01.DataManagement;
 using DataModel;
 
 namespace WpfApp_01
