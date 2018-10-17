@@ -61,7 +61,6 @@
     </Compile>
     <Compile Include="MVVM\LambdaCommand.cs" />
     <Compile Include="MVVM\MainWindowViewModel.cs" />
-    <Compile Include="MVVM\ViewModel.cs" />
     <Page Include="EmployerEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -74,8 +73,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\Department.cs" />
-    <Compile Include="Data\Employee.cs" />
     <Compile Include="EmployerEdit.xaml.cs">
       <DependentUpon>EmployerEdit.xaml</DependentUpon>
     </Compile>
@@ -89,7 +86,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\Company.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -114,6 +110,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataModel01\DataModel.csproj">
+      <Project>{c19d3bce-f55d-4dee-b148-42f28c29dbbc}</Project>
+      <Name>DataModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

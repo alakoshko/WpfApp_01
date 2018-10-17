@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfApp_01.DataManagement;
+using DataModel;
 
 namespace WpfApp_01
 {
