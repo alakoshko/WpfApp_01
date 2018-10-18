@@ -14,13 +14,9 @@ namespace WpfApp_01
     /// </summary>
     public partial class App : Application
     {
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            base.OnStartup(e);
-
-            HttpClient client = new HttpClient();
-            var response = client.GetAsync("http://localhost:50075/api/Employes").Result;
-            var test = response.Content.ReadAsStringAsync().Result;
-        }
+        //protected override void OnStartup(StartupEventArgs e)
+        //{
+        //    base.OnStartup(e);
+        //}
     }
 }

@@ -7,6 +7,9 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using DataModel;
+using System.Net.Http;
+using System.Configuration;
+using Newtonsoft.Json;
 
 namespace WpfApp_01
 {
@@ -57,6 +60,7 @@ namespace WpfApp_01
 
         internal SQLProcessing sqlProcessing;
 
+
         public MainWindowViewModel()
         {
             AddCommand = new LambdaCommand(OnAddCommandExecute);
@@ -64,35 +68,48 @@ namespace WpfApp_01
             EditCommand = new LambdaCommand(OnEditCommandExecute);
             SaveEmployeeCommand = new LambdaCommand(OnSaveEmployeeCommandExecute);
 
+            #region Загрузка через RestAPI
+            var vConnectionStringApiServer = ConfigurationManager.AppSettings["_API_URL"];
+
+            HttpClient client = new HttpClient();
+            using (var response = client.GetAsync(vConnectionStringApiServer + "/api/Employes").Result)
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var strJson = response.Content.ReadAsStringAsync().Result;
+
+                    Employes  = JsonConvert.DeserializeObject<ObservableCollection<Employee>>(strJson);
+                }
+            }
+            #endregion
+
             #region Загрузка из БД
-            sqlProcessing = new SQLProcessing();
+            //sqlProcessing = new SQLProcessing();
 
-            //Company
-            sqlProcessing.GetCompanies(Companies);
+            ////Company
+            //sqlProcessing.GetCompanies(Companies);
 
-            //Departaments
-            sqlProcessing.GetDepartments(Depts);
-            foreach (var v in Depts)
-            {
-                if (v.CompanyID != null)
-                    v.Company = Companies.FirstOrDefault(p => p.ID == v.CompanyID);
-            }
-            
+            ////Departaments
+            //sqlProcessing.GetDepartments(Depts);
+            //foreach (var v in Depts)
+            //{
+            //    if (v.CompanyID != null)
+            //        v.Company = Companies.FirstOrDefault(p => p.ID == v.CompanyID);
+            //}
 
-            //Employes
-            sqlProcessing.GetEmployees(Employes);
-            foreach (var v in Employes)
-            {
-                if (v.DeptID != null)
-                    v.Dept = Depts.FirstOrDefault(p => p.ID == v.DeptID);
-            }
-            SelectedEmployer = null;
+
+            ////Employes
+            //sqlProcessing.GetEmployees(Employes);
+            //foreach (var v in Employes)
+            //{
+            //    if (v.DeptID != null)
+            //        v.Dept = Depts.FirstOrDefault(p => p.ID == v.DeptID);
+            //}
+            //SelectedEmployer = null;
 
             #endregion
         }
-
-
-           
+   
 
         private void OnAddCommandExecute(object obj)
         {
